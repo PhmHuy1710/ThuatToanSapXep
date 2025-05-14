@@ -48,7 +48,9 @@ Dự án được xây dựng với cấu trúc module hóa, dễ dàng mở r�
 
 ## Tác giả
 
-- [Tên tác giả](mailto:email@example.com)
+- Đặng Hoàng Vũ
+- Phạm Trường Huy
+- Mai Đức Tùng
 
 ## Giấy phép
 
