@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
       () => Math.floor(Math.random() * 100) + 1
     );
     HienThi.khoiTaoMang(mangHienTai);
+    HienThi.hienThiDemPhanTu();
 
     kichHoatNutSapXep();
   }
@@ -156,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     taoMangNgauNhien();
+    HienThi.hienThiDemPhanTu();
     capNhatDieuKhien();
   }
 

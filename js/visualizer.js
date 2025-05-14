@@ -10,6 +10,7 @@ const HienThi = (function () {
   let hienThiSoSanh = document.getElementById("comparisons");
   let hienThiHoanDoi = document.getElementById("swaps");
   let hienThiThoiGian = document.getElementById("timeElapsed");
+  let khungDemPhanTu = document.getElementById("elementCounts");
 
   let mang = [];
   let thanhHienThi = [];
@@ -46,6 +47,45 @@ const HienThi = (function () {
     }
   };
 
+  // Đếm số phần tử trong các cột giá trị
+  const demPhanTu = () => {
+    // Tạo một đối tượng để đếm số lượng phần tử cho mỗi giá trị
+    const demGiaTri = {};
+
+    // Đếm số lượng phần tử cho mỗi giá trị
+    mang.forEach(giaTri => {
+      if (demGiaTri[giaTri]) {
+        demGiaTri[giaTri]++;
+      } else {
+        demGiaTri[giaTri] = 1;
+      }
+    });
+
+    return demGiaTri;
+  };
+
+  // Hiển thị số lượng phần tử trong các cột
+  const hienThiDemPhanTu = () => {
+    // Đếm số lượng phần tử cho mỗi giá trị
+    const demGiaTri = demPhanTu();
+
+    // Xóa nội dung hiện tại
+    khungDemPhanTu.innerHTML = "";
+
+    // Tạo danh sách các giá trị được sắp xếp
+    const danhSachGiaTri = Object.keys(demGiaTri).sort(
+      (a, b) => parseInt(a) - parseInt(b)
+    );
+
+    // Hiển thị số lượng phần tử cho mỗi giá trị
+    danhSachGiaTri.forEach(giaTri => {
+      const phanTuDem = document.createElement("div");
+      phanTuDem.className = "count-item";
+      phanTuDem.textContent = `Giá trị ${giaTri}: ${demGiaTri[giaTri]} phần tử`;
+      khungDemPhanTu.appendChild(phanTuDem);
+    });
+  };
+
   // Tạo thanh hiển thị cho mảng
   const taoThanhHienThi = () => {
     khungMang.innerHTML = "";
@@ -63,6 +103,9 @@ const HienThi = (function () {
       khungMang.appendChild(thanh);
       thanhHienThi.push(thanh);
     });
+
+    // Hiển thị số lượng phần tử trong các cột
+    hienThiDemPhanTu();
   };
 
   // Reset hiển thị
@@ -81,6 +124,9 @@ const HienThi = (function () {
     // Xóa thông báo bước
     khungBuoc.innerHTML =
       '<p>Chọn thuật toán và nhấn "Bắt Đầu Sắp Xếp" để xem mô phỏng.</p>';
+
+    // Cập nhật hiển thị số lượng phần tử
+    hienThiDemPhanTu();
   };
 
   // Hiển thị thông tin bước
@@ -194,6 +240,9 @@ const HienThi = (function () {
         const chieuCaoTam = thanhHienThi[i].style.height;
         thanhHienThi[i].style.height = thanhHienThi[j].style.height;
         thanhHienThi[j].style.height = chieuCaoTam;
+
+        // Cập nhật hiển thị số lượng phần tử
+        hienThiDemPhanTu();
       }
     }, doTre);
 
@@ -215,6 +264,9 @@ const HienThi = (function () {
         thanhHienThi[viTri].style.height = `${
           (giaTri / giaTriLonNhat) * 250
         }px`;
+
+        // Cập nhật hiển thị số lượng phần tử
+        hienThiDemPhanTu();
       }
     }, doTre);
 
@@ -289,5 +341,8 @@ const HienThi = (function () {
 
     // Lấy thời gian trễ
     layDoTre: layDoTre,
+
+    // Hiển thị đếm phần tử
+    hienThiDemPhanTu: hienThiDemPhanTu,
   };
 })();
