@@ -99,11 +99,29 @@ input[type="range"] {
     padding: 10px;
 }
 
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1px;
+    position: relative;
+}
+
 .array-bar {
     background-color: #3498db;
-    margin: 0 1px;
-    width: 8px;
     transition: height 0.2s ease-in-out;
+    width: 100%;
+}
+
+.bar-value {
+    position: absolute;
+    top: -20px;
+    font-size: 12px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px 4px;
+    border-radius: 3px;
+    user-select: none;
 }
 
 .array-bar.compared {
@@ -205,7 +223,14 @@ input[type="range"] {
         flex-direction: column;
     }
     
-    .array-bar {
-        width: 4px;
+    .bar-wrapper {
+        margin: 0;
+    }
+}
+
+/* Ẩn giá trị số khi có quá nhiều cột */
+@media (max-width: 768px), (min-width: 769px) and (max-width: 1200px) {
+    .array-container.large-array .bar-value {
+        display: none;
     }
 } 

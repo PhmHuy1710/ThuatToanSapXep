@@ -94,13 +94,31 @@ const HienThi = (function () {
     const giaTriLonNhat = Math.max(...mang);
     const doRongThanh = Math.max(5, Math.min(20, 500 / mang.length));
 
+    // Thêm class để ẩn giá trị khi có quá nhiều phần tử
+    if (mang.length > 50) {
+      khungMang.classList.add("large-array");
+    } else {
+      khungMang.classList.remove("large-array");
+    }
+
     mang.forEach((giaTri, viTri) => {
+      const khungThanh = document.createElement("div");
+      khungThanh.className = "bar-wrapper";
+      khungThanh.style.width = `${doRongThanh}px`;
+
       const thanh = document.createElement("div");
       thanh.className = "array-bar";
       thanh.style.height = `${(giaTri / giaTriLonNhat) * 250}px`;
-      thanh.style.width = `${doRongThanh}px`;
+      thanh.style.width = `100%`;
 
-      khungMang.appendChild(thanh);
+      const giaTriHienThi = document.createElement("div");
+      giaTriHienThi.className = "bar-value";
+      giaTriHienThi.textContent = giaTri;
+
+      khungThanh.appendChild(thanh);
+      khungThanh.appendChild(giaTriHienThi);
+
+      khungMang.appendChild(khungThanh);
       thanhHienThi.push(thanh);
     });
 
@@ -236,6 +254,14 @@ const HienThi = (function () {
         // Hoán đổi giá trị trong mảng dữ liệu
         [mang[i], mang[j]] = [mang[j], mang[i]];
 
+        // Lấy các wrapper chứa thanh và giá trị
+        const wrapperI = thanhHienThi[i].parentElement;
+        const wrapperJ = thanhHienThi[j].parentElement;
+
+        // Cập nhật giá trị hiển thị
+        wrapperI.querySelector(".bar-value").textContent = mang[i];
+        wrapperJ.querySelector(".bar-value").textContent = mang[j];
+
         // Hoán đổi chiều cao của các thanh
         const chieuCaoTam = thanhHienThi[i].style.height;
         thanhHienThi[i].style.height = thanhHienThi[j].style.height;
@@ -264,6 +290,10 @@ const HienThi = (function () {
         thanhHienThi[viTri].style.height = `${
           (giaTri / giaTriLonNhat) * 250
         }px`;
+
+        // Cập nhật giá trị hiển thị
+        const wrapper = thanhHienThi[viTri].parentElement;
+        wrapper.querySelector(".bar-value").textContent = giaTri;
 
         // Cập nhật hiển thị số lượng phần tử
         hienThiDemPhanTu();
