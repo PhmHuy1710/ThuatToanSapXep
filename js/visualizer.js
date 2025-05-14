@@ -40,11 +40,6 @@ const HienThi = (function () {
   const xoaHieuUng = () => {
     danhSachThoiGian.forEach(id => clearTimeout(id));
     danhSachThoiGian = [];
-
-    if (khoangThoiGian) {
-      clearInterval(khoangThoiGian);
-      khoangThoiGian = null;
-    }
   };
 
   // Đếm số phần tử trong các cột giá trị
@@ -332,6 +327,10 @@ const HienThi = (function () {
     // Dừng mô phỏng
     dungHienThi: function () {
       xoaHieuUng();
+      if (khoangThoiGian) {
+        clearInterval(khoangThoiGian);
+        khoangThoiGian = null;
+      }
     },
 
     // Đặt lại trạng thái

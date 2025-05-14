@@ -19,12 +19,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const tocDoSapXep = document.getElementById("sortingSpeed");
   const hienThiTocDo = document.getElementById("sortingSpeedValue");
   const moTaThuatToan = document.getElementById("algorithmDescription");
+  const nhapThuCong = document.getElementById("manualArrayInput");
+  const nutApDungThuCong = document.getElementById("applyManualArrayBtn");
 
   // Biến trạng thái
   let mangHienTai = [];
   let thuatToanHienTai = null;
   let dangSapXep = false;
   let daDung = false;
+  let thoiGianBatDau = 0;
+  let thoiGianKetThuc = 0;
 
   // Khởi tạo ứng dụng
   function khoiTao() {
@@ -40,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     nutBatDau.addEventListener("click", batDauSapXep);
     nutTamDung.addEventListener("click", tamDungTiepTuc);
     nutDatLai.addEventListener("click", datLai);
+    nutApDungThuCong.addEventListener("click", apDungMangThuCong);
 
     kichThuocMang.addEventListener("input", capNhatHienThiKichThuoc);
     kichThuocMang.addEventListener("change", taoMangNgauNhien);
@@ -67,6 +72,52 @@ document.addEventListener("DOMContentLoaded", function () {
   // Cập nhật tốc độ sắp xếp
   function capNhatTocDo() {
     HienThi.datTocDo(parseInt(tocDoSapXep.value));
+  }
+
+  // Xử lý nhập mảng thủ công
+  function apDungMangThuCong() {
+    // Lấy giá trị input và xử lý
+    const dauVao = nhapThuCong.value.trim();
+    if (!dauVao) {
+      alert("Vui lòng nhập các số ngăn cách bởi dấu phẩy!");
+      return;
+    }
+
+    // Chuyển đổi chuỗi input thành mảng số
+    try {
+      const mangMoi = dauVao.split(",").map(item => {
+        const so = parseInt(item.trim());
+        if (isNaN(so)) {
+          throw new Error("Dữ liệu không hợp lệ");
+        }
+        return so;
+      });
+
+      if (mangMoi.length < 2) {
+        alert("Vui lòng nhập ít nhất 2 số!");
+        return;
+      }
+
+      if (mangMoi.length > 100) {
+        alert("Số lượng phần tử không được vượt quá 100!");
+        return;
+      }
+
+      // Cập nhật mảng hiện tại
+      mangHienTai = mangMoi;
+      kichThuocMang.value = mangHienTai.length;
+      hienThiKichThuoc.textContent = mangHienTai.length;
+
+      // Hiển thị mảng
+      HienThi.khoiTaoMang(mangHienTai);
+      HienThi.hienThiDemPhanTu();
+
+      kichHoatNutSapXep();
+    } catch (e) {
+      alert(
+        "Dữ liệu không hợp lệ. Vui lòng nhập các số ngăn cách bởi dấu phẩy!"
+      );
+    }
   }
 
   // Tạo mảng ngẫu nhiên
@@ -116,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     dangSapXep = true;
     daDung = false;
+    thoiGianBatDau = new Date().getTime();
     capNhatDieuKhien();
 
     HienThi.batDauHienThi();
@@ -124,11 +176,23 @@ document.addEventListener("DOMContentLoaded", function () {
       await thuatToanHienTai.sort([...mangHienTai]);
 
       // Kết thúc sắp xếp
+      thoiGianKetThuc = new Date().getTime();
       dangSapXep = false;
+
+      // Dừng bộ đếm thời gian
+      HienThi.dungHienThi();
+
+      // Cập nhật thời gian cuối cùng
+      const thoiGianThucHien = (thoiGianKetThuc - thoiGianBatDau) / 1000;
+      document.getElementById("timeElapsed").textContent =
+        thoiGianThucHien.toFixed(2) + "s";
+
       capNhatDieuKhien();
     } catch (error) {
       console.error("Lỗi trong quá trình sắp xếp:", error);
       dangSapXep = false;
+      // Dừng bộ đếm thời gian nếu có lỗi
+      HienThi.dungHienThi();
       capNhatDieuKhien();
     }
   }
@@ -172,6 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
       nutTamDung.disabled = false;
       nutDatLai.disabled = false;
       kichThuocMang.disabled = true;
+      nhapThuCong.disabled = true;
+      nutApDungThuCong.disabled = true;
       cacNutThuatToan.forEach(nut => (nut.disabled = true));
     } else {
       // Không sắp xếp
@@ -180,6 +246,8 @@ document.addEventListener("DOMContentLoaded", function () {
       nutTamDung.disabled = true;
       nutDatLai.disabled = false;
       kichThuocMang.disabled = false;
+      nhapThuCong.disabled = false;
+      nutApDungThuCong.disabled = false;
       cacNutThuatToan.forEach(nut => (nut.disabled = false));
     }
   }

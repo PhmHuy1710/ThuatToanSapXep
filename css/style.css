@@ -44,6 +44,26 @@ h1 {
     margin-bottom: 15px;
 }
 
+.manual-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#manualArrayInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+}
+
 button {
     padding: 10px 15px;
     background-color: #3498db;
